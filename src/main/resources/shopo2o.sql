@@ -70,3 +70,62 @@ create table `tb_area`(
  	primary key(`shop_category_id`),
  	CONSTRAINT `fk_shop_category_self` FOREIGN KEY (`parent_id`) REFERENCES `tb_shop_category`(`shop_category_id`)
  )ENGINE = InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+ 
+ create table `tb_shop`(
+ 	`shop_id` int(10) NOT NULL AUTO_INCREMENT,
+ 	`owner_id` int(10) NOT NULL COMMENT '店铺创建人',
+ 	`area_id` int(5) DEFAULT NULL ,
+ 	`shop_category_id` int(11) DEFAULT NULL ,
+ 	`shop_name` varchar(256) NOT NULL ,
+ 	`shop_desc` varchar(1024) DEFAULT NULL ,
+ 	`shop_addr` varchar(200) DEFAULT NULL ,
+ 	`phone` varchar(128) DEFAULT NULL ,
+ 	`priority` int(3) DEFAULT '0',
+ 	`create_time` datetime DEFAULT NULL , 
+ 	`last_edit_time` datetime DEFAULT NULL,
+ 	`enable_status` int(2) NOT NULL DEFAULT '0',
+ 	`advice` varchar(255) DEFAULT NULL ,
+ 	primary key(`shop_id`),
+ 	constraint `fk_shop_area` foreign key(`area_id`) references `tb_area`(`area_id`),
+ 	constraint `fk_shop_profile` foreign key(`owner_id`) references `tb_person_info`(`user_id`),
+ 	constraint `fk_shop_shopcate` foreign key(`shop_category_id`) references `tb_shop_category`(`shop_category_id`)
+ )ENGINE = InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+ 
+ create table `tb_product_category`(
+ 	`product_category_id` int(11) NOT NULL AUTO_INCREMENT,
+ 	`shop_id` int(10) not null default '0' ,
+ 	`product_category_name` varchar(1000) NOT NULL DEFAULT '',
+ 	`priority` int(3) DEFAULT 0 ,
+ 	`create_time` datetime DEFAULT NULL , 
+ 	primary key(`product_category_id`),
+ 	constraint `procate_shop` foreign key(`shop_id`) references `tb_shop`(`shop_id`)
+ )ENGINE = InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+ 
+ create table `tb_product_img`(
+ 	`product_img_id` int(11) not null  auto_increment,
+ 	`img_addr` varchar(2000) not null default '', 
+ 	`img_desc` varchar(2000) default '',
+ 	`priority` int(3) default '0',
+ 	`create_time` datetime DEFAULT NULL , 
+ 	`product_id` int(11) not null ,
+ 	primary key(`product_img_id`),
+ 	constraint `fk_proimg_product` foreign key (`product_id`) references `tb_product`(`product_id`)
+ )ENGINE = InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+ 
+  create table `tb_product`(
+ 	`product_id` int(100) NOT NULL AUTO_INCREMENT,
+ 	`product_name` varchar(100) NOT NULL ,
+ 	`product_desc` varchar(2000) DEFAULT NULL ,
+ 	`img_addr` varchar(2000) DEFAULT NULL ,
+ 	`normal_price` varchar(100) DEFAULT NULL ,
+ 	`promotion_price` varchar(100) DEFAULT NULL ,
+ 	`priority` varchar(2) not null DEFAULT '0' ,
+ 	`create_time` datetime DEFAULT NULL , 
+ 	`last_edit_time` datetime DEFAULT NULL,
+ 	`enable_status` int(2) NOT NULL DEFAULT '0',
+ 	`product_category_id` int(11) default null ,
+ 	`shop_id` int(20) not null  DEFAULT '0' ,
+ 	primary key(`product_id`),
+ 	constraint `fk_product_procate` foreign key(`product_category_id`) references `tb_product_category`(`product_category_id`),
+ 	constraint `fk_product_shop` foreign key(`shop_id`) references `tb_shop`(`shop_id`)
+ )ENGINE = InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
